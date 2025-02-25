@@ -1,4 +1,4 @@
-# Fundamentals of Database Systems
+# Information Management
 
 ## Information Management in the Digital Age  
 - Efficiently organizing, storing, and retrieving digital data for decision-making.  
