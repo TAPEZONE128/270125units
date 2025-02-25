@@ -220,7 +220,50 @@ SELECT name AS product,  list_price * 0.9 AS sale_price
 - Client applications might interpret converted data uniquely
 - Always test conversions in target environment
 
+---
+## Introduction to Transact SQL (T-SQL)
+- Foundational database querying language
+- Part of Microsoft SQL Server ecosystem
+- Designed for managing and manipulating relational database information
 
+### Basic SELECT Statement 
+**Key Capabilities**
+  - **Select All Rows:** Retrieve entire dataset
+  - **Column Selection:** Choose specific columns for output
+  - **Column Aliasing:** Rename columns for clarity and readability
 
+**Data Manipulation Techniques**
+  - **Expressions:** Calculate values during query execution
+  - Data Type Conversion:
+    1. String to Number
+    2. Number to String
+    3. Date to String transformations
 
+**Null Value Handling**
+  - **Null Concept:** Represents unknown or missing information
+  - Strategies for managing null values in queries
+  - Importance of understanding null's unique behavior in database operations
 
+---
+
+## Learning Recommendations
+
+### Practical Learning Approach
+**Lab Exercise:**
+  - Download lab instructions
+  - Set up Azure SQL Database
+  - Complete challenge scenarios
+  - Compare solutions with provided answer files
+
+### Recommended Study Workflow
+<img src="https://github.com/TAPEZONE128/270125units/blob/main/DAT201x/images/diagram-export%20(4).png" length="300" width="300"/>
+
+### Key Terminology Table
+| Term | Definition | Context |
+|------|------------|---------|
+| SELECT | Primary query command | Retrieving database data |
+| Alias | Column/table nickname | Improving query readability |
+| Null | Unknown value |Representing missing information |
+| Expression | Calculated value | Deriving new data during query |
+
+---
