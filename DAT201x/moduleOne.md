@@ -433,3 +433,83 @@ SELECT name AS product,  list_price * 0.9 AS sale_price
 
 ### Mermaid Conversion Flow Diagram
 <img src="https://raw.githubusercontent.com/TAPEZONE128/270125units/refs/heads/main/DAT201x/images/diagram-export%20(7).png" length="300" width="300"/>
+
+---
+
+## Handling Null Values in SQL: Advanced Techniques
+
+### Understanding Null Value Conversion Strategies 
+  - **TryCast Technique:** Convert problematic values to manageable formats
+    - Converts non-numeric values to null
+    - Allows transformation of inconsistent data types
+    - Provides a way to handle mixed data in columns
+
+### Null Conversion Methods
+**Numeric Conversion**
+  - Use `TryCast()` to convert values to integers
+  - Null values automatically become zero
+  - Prevents query interruption due to type mismatches
+
+### Concatenation with Null Values 
+  - **Null Concatenation Challenge:** Any expression with null results in null
+  - **Solution Strategies:**
+    - Convert null values to empty strings
+    - Enables successful string concatenation
+    - Preserves available data elements
+
+## Null Handling Functions
+
+### NULLIF Function 
+  - **Purpose:** Replace specific values with null
+  - **Example Use Case:**
+    - Convert "multi-color" to null
+    - Useful for data standardization
+    - Allows filtering out unwanted categorical values
+
+### COALESCE Function 
+  - **Key Feature:** Finds first non-null value in a series of columns
+  - **Practical Application:**
+    - Useful for date tracking in product tables
+    - Can combine multiple potential date columns
+    - Ensures a value is always returned
+
+## CASE Expressions for Null Handling 
+
+### Search CASE Technique
+ - **Flexible Logical Evaluation**
+ - **Use Cases:**
+   - Determine product sales status
+   - Create derived columns based on null conditions
+   - Implement complex conditional logic
+
+### Case Statement Variants 
+1. **Searched CASE**
+  - Multiple conditional checks
+  - Flexible logic implementation
+2. **Simple CASE**
+  - Direct column value comparison
+  - Simpler syntax for straightforward transformations
+
+### Database Design Considerations (07:28-07:54)
+
+**Null Frequency as Design Indicator**
+  - Excessive nulls might suggest poor database design
+  - Recommend reviewing data model
+  - Aim for minimal null values
+
+### Null Handling Best Practices
+  - Always have a strategy for null values
+  - Use appropriate conversion techniques
+  - Consider database design implications
+
+### Null Handling Decision Tree
+
+<img src="https://raw.githubusercontent.com/TAPEZONE128/270125units/refs/heads/main/DAT201x/images/diagram-export%20(8).png" length="300" width="300"/>
+
+### Key Takeaways
+  - Null values are not errors but data states
+  - Multiple techniques exist for managing nulls
+  - Proper handling prevents query failures
+  - Conversion methods depend on specific use case
+
+
