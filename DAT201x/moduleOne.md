@@ -267,3 +267,169 @@ SELECT name AS product,  list_price * 0.9 AS sale_price
 | Expression | Calculated value | Deriving new data during query |
 
 ---
+
+## Understanding Null Values in Databases
+
+### What is a Null Value? 
+  - **Definition:** A null value represents an unknown or missing data point
+  - **Key Distinctions:**
+    - Not an empty string
+    - Not zero
+    - Not "nothing"
+    - Represents a state of information absence
+
+### ANSI Null Behavior Standards 
+**Standard Null Handling Rules**
+  - Any expression involving a null results in null
+  - Example Scenarios:
+    - Adding something to an unknown value = unknown
+    - Concatenating strings with null = null
+  - Recommended Practice:
+    - Keep standard null handling enabled
+    - Avoid custom null interpretation settings
+
+## Comparing Null Values 
+
+### Null Comparison Challenges
+**Comparing two null values yields:**
+  - Technically "unknown"
+  - Practically treated as false
+
+- Cannot definitively determine equality between nulls
+
+### Checking for Null Values 
+**Proper Null Identification**
+  - **Correct Method:** Use `IS NULL`
+  - **Incorrect Method:** Do NOT use = `NULL`
+  - **Example Query:** `SELECT * FROM table WHERE column IS NULL`
+
+## Null vs. Empty Values 
+
+### Key Differences
+  - **Null:** Truly unknown value
+  - **Empty:** Known to be nothing
+  - **Can be represented by:**
+    - Two quotation marks ""
+    - Zero 0
+    - Intentionally blank entry
+
+## Null Handling Functions
+1. **ISNULL Function**
+  - Checks if a column is null
+  - Allows specifying a default value
+  - **Examples:**
+    - `ISNULL(address_line, '')` returns empty string if null
+    - `ISNULL(discount, 0)` returns zero if null
+
+2. **COALESCE Function**
+  - Evaluates multiple columns in order
+  - Returns first non-null value
+  - **Use Case:** Contact Information Fallback
+    - Email → Phone → Mobile Number
+
+## Practical Null Handling Strategy
+
+### Recommended Approach
+  - Understand null as "unknown"
+  - Use standard null comparison methods
+  - Implement fallback strategies with COALESCE
+  - Avoid unnecessary null entries
+
+### Null Handling Diagram
+<img src="https://github.com/TAPEZONE128/270125units/blob/main/DAT201x/images/diagram-export%20(6).png" length="300" width="300"/>
+
+### Common Null Scenarios
+
+| Scenario | Null Handling | Recommended Action |
+|----------|---------------|--------------------|
+| Missing Email | Use COALESCE | Provide alternative contact |
+| Zero Discount | Use ISNULL | Default to standard rate |
+| Incomplete Address | Mark specific fields null | Partial information acceptable |
+
+### Key Takeaways
+  - Null ≠ Empty
+  - Always use `IS NULL` for comparisons
+  - Leverage `COALESCE` for flexible data retrieval
+  - Maintain data integrity through careful null management
+
+---
+## Transact-SQL Data Types
+
+## Numeric Data Types: Exact vs. Floating Point 
+
+### Exact Numeric Types
+**Precision and Accuracy**
+  - Provide absolute specific numeric representation
+  - Maintain exact decimal place values
+  - Ideal for financial calculations or scenarios requiring precise numbers
+
+### Floating Point Numbers
+**Characteristics**
+  - Approximate representations (e.g., π ≈ 3.14)
+  - Potential for slight inaccuracies beyond certain decimal places
+  - Useful for scientific or approximate calculations
+
+### Integer Variations 
+**Storage Space Allocation**
+  - Different integer types based on binary bit allocation
+  - Ranges determined by number of bits assigned
+
+### Integer Type Progression:
+| Type | Bit Size | Range |
+|------|----------|-------|
+| Tiny Int | 8 bits | 0-255 |
+| Small Int | 16 bits | -32,768 to 32,767 |
+| Int | 32 bits | Larger range |
+| Big Int | 64 bits | Extremely large range |
+
+## Data Type Compatibility and Conversion 
+
+### Conversion Types
+1. **Implicit Conversion**
+  - Automatic type conversion between compatible types
+  - Works for similar data types (strings, numbers)
+2. **Explicit Conversion**
+  - Manual conversion using functions
+  - **Key conversion functions:**
+    - `CAST`
+    - `CONVERT`
+    - `PARSE`
+    - `STR`
+
+## Date Conversion Challenges 
+- **Locale-Dependent Date Formats**
+  - Potential misinterpretation of date order
+  - Example: 05/06/2015 could mean:
+    - May 6th, 2015 (US format)
+    - June 5th, 2015 (European format)
+
+### Safe Conversion Techniques
+  - Use `TRY_CAST` for error-tolerant conversions
+  - Explicitly specify conversion formats
+  - Avoid relying on implicit date conversions
+
+## Additional Data Types 
+### Specialized Data Types
+  - **Date and Time**
+    - `DATETIME`
+    - `DATETIME2`
+    - Individual date/time storage options
+      
+  - **Binary Data Types**
+    - Binary storage
+    - Image storage
+    - XML document storage
+
+  - **Geospatial Types**
+    - Geography
+    - Geometry
+    - Location-based data storage
+
+## Key Conversion Considerations
+  - Always specify explicit conversion when possible
+  - Be aware of potential data loss
+  - Understand locale and format differences
+  - Use appropriate conversion functions for specific scenarios
+
+### Mermaid Conversion Flow Diagram
+<img src="https://raw.githubusercontent.com/TAPEZONE128/270125units/refs/heads/main/DAT201x/images/diagram-export%20(7).png" length="300" width="300"/>
