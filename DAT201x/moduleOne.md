@@ -490,7 +490,7 @@ SELECT name AS product,  list_price * 0.9 AS sale_price
   - Direct column value comparison
   - Simpler syntax for straightforward transformations
 
-### Database Design Considerations (07:28-07:54)
+### Database Design Considerations
 
 **Null Frequency as Design Indicator**
   - Excessive nulls might suggest poor database design
