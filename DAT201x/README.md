@@ -517,3 +517,394 @@ SELECT name AS product,  list_price * 0.9 AS sale_price
 
 ---
 
+# SQL Sorting and Result Filtering Techniques
+
+## Sorting Results with `ORDER BY`
+
+### Basic Sorting
+- Default sorting is ascending (`ASC`)
+- Can specify sorting direction:
+  - `ASC`: Ascending order (0 to 100, A to Z)
+  - `DESC`: Descending order (100 to 0, Z to A)
+
+### Multi-Column Sorting
+**Example syntax:**
+```sql
+SELECT Category, ProductName, Price
+FROM Products
+ORDER BY Category ASC, Price DESC;
+```
+- First sorts by `Category` ascending
+- Then sorts by `Price` descending within each category
+
+## Limiting Results with `TOP`
+
+### Selecting Top N Results
+- Use `TOP` to limit returned rows
+- Can specify number or percentage
+
+**Examples:**
+```sql
+SELECT TOP 10 * FROM Products;
+SELECT TOP 5 PERCENT * FROM Products;
+```
+
+### Handling Ties
+- `WITH TIES` includes additional rows with equal values
+- Ensures all rows matching the top N criteria are returned
+
+## Pagination Techniques
+
+### Using `OFFSET` and `FETCH`
+- Skip initial rows and retrieve next set
+
+**Example:**
+```sql
+ORDER BY Price DESC
+OFFSET 10 ROWS
+FETCH NEXT 10 ROWS ONLY;
+```
+
+### Syntax Flexibility
+- `ROW` and `ROWS` are interchangeable
+- `FIRST` and `NEXT` mean the same thing
+
+---
+
+# Understanding `SELECT` and `DISTINCT` in SQL
+
+## Basic SELECT Behavior
+- A standard `SELECT` statement returns **all rows** in your result set.
+  - Each row in your original table appears in the output.
+  - **Duplicate values** are included by default.
+  - The number of result rows matches the number of rows in the source table.
+
+## Introducing `DISTINCT`: Eliminating Duplicates
+
+### Single Column `DISTINCT`
+- To see unique values in a column, use the `DISTINCT` keyword:
+```sql
+SELECT DISTINCT Color FROM Products;
+```
+- This query returns only unique color values, removing repetitions.
+
+### Multiple Column `DISTINCT`
+- `DISTINCT` can also be used with multiple columns:
+```sql
+SELECT DISTINCT Color, Size FROM Products;
+```
+- SQL returns unique **combinations** of color and size.
+
+## Important Characteristics
+- `DISTINCT` operates at the **row level**.
+- It shows **unique row combinations**, not individual column uniqueness.
+- Helps simplify result sets by removing redundant information.
+
+## Practical Example
+
+Consider a `Products` table with the following rows:
+```
+Blue, Medium
+Blue, Large
+Yellow, Small
+Blue, Medium
+```
+
+- **Standard SELECT** (returns 4 rows):
+```sql
+SELECT Color FROM Products;
+```
+
+- **DISTINCT SELECT** (returns 2 rows: Blue, Yellow):
+```sql
+SELECT DISTINCT Color FROM Products;
+```
+
+## Best Practices
+- Use `DISTINCT` when you need a summary of unique values.
+- Be aware that `DISTINCT` can **impact query performance**.
+- Consider your specific **data analysis needs** when choosing between standard and `DISTINCT` queries.
+
+---
+
+
+
+## **Module 3: Working with Multiple Tables (JOINs)**
+
+### **Key Topics:**
+
+* Concepts of Joins: Inner, Outer (Left, Right, Full)
+* Join syntax: ANSI SQL-92 (`JOIN ... ON`) vs. old-style (`WHERE`)
+* `Cartesian Product` and its accidental creation
+
+### **Examples:**
+
+```sql
+-- Inner Join
+SELECT p.Name AS ProductName, c.Name AS Category
+FROM Product p
+JOIN ProductCategory c ON p.CategoryID = c.CategoryID;
+
+-- Left Outer Join
+SELECT c.FirstName, s.SalesOrderNumber
+FROM Customer c
+LEFT JOIN SalesOrder s ON c.CustomerID = s.CustomerID;
+
+-- Multiple Table Join
+SELECT o.OrderDate, od.Quantity, p.Name
+FROM SalesOrderHeader o
+JOIN SalesOrderDetail od ON o.OrderID = od.OrderID
+JOIN Product p ON od.ProductID = p.ProductID;
+```
+
+### **Notes:**
+
+* Use aliases to clarify source tables.
+* Use `LEFT JOIN` to keep all rows from the left table.
+* `OUTER` keyword is optional: `LEFT JOIN` implies `LEFT OUTER JOIN`.
+
+---
+
+## **Module 4: Filtering Rows with Predicates**
+
+### **Key Topics:**
+
+* `WHERE` clause with operators: `=`, `<`, `>`, `<=`, `>=`, `<>`
+* `BETWEEN`, `IN`, `LIKE`, `NOT`, `AND`, `OR`
+* Null checks: `IS NULL`, `IS NOT NULL`
+
+### **Examples:**
+
+```sql
+SELECT * FROM Products WHERE Color = 'Red';
+SELECT * FROM Products WHERE Price BETWEEN 100 AND 200;
+SELECT * FROM Products WHERE Size IN ('S', 'M', 'L');
+SELECT * FROM Products WHERE ProductName LIKE 'A%';
+SELECT * FROM Products WHERE ProductName LIKE '_B%';
+SELECT * FROM Products WHERE EndDate IS NULL;
+```
+
+### **Notes:**
+
+* `LIKE` supports `%` (any number of chars) and `_` (one char)
+* Use parentheses `()` to group logical expressions for clarity.
+* `IN` is more concise than multiple `OR` conditions.
+
+---
+
+## **Module 5: Aggregating Data**
+
+### **Key Topics:**
+
+* Aggregate functions: `SUM`, `AVG`, `COUNT`, `MIN`, `MAX`
+* Grouping with `GROUP BY`
+* Filtering grouped data using `HAVING`
+
+### **Examples:**
+
+```sql
+SELECT CategoryID, COUNT(*) AS ProductCount
+FROM Products
+GROUP BY CategoryID;
+
+SELECT CategoryID, AVG(Price) AS AvgPrice
+FROM Products
+GROUP BY CategoryID
+HAVING AVG(Price) > 50;
+```
+
+### **Notes:**
+
+* `GROUP BY` must include every selected non-aggregated column.
+* `HAVING` filters aggregated results, whereas `WHERE` filters rows before grouping.
+
+---
+
+## **Module 6: Using Subqueries**
+
+### **Key Topics:**
+
+* Scalar subqueries, multi-row subqueries
+* Subqueries in `SELECT`, `FROM`, `WHERE`, `HAVING`
+* Correlated subqueries
+
+### **Examples:**
+
+```sql
+-- Subquery in SELECT
+SELECT Name, (SELECT AVG(Price) FROM Products) AS AvgPrice
+FROM Products;
+
+-- Subquery in WHERE
+SELECT * FROM Products
+WHERE CategoryID IN (SELECT CategoryID FROM Categories WHERE Name LIKE 'B%');
+
+-- Correlated subquery
+SELECT p.Name
+FROM Products p
+WHERE Price > (SELECT AVG(Price) FROM Products WHERE CategoryID = p.CategoryID);
+```
+
+### **Notes:**
+
+* Correlated subqueries reference outer query columns.
+* Can be performance-intensive; use carefully.
+
+---
+
+## **Module 7: Table Expressions**
+
+### **Key Topics:**
+
+* Derived tables
+* Common Table Expressions (CTEs)
+* Recursive CTEs
+
+### **Examples:**
+
+```sql
+-- CTE
+WITH ProductCTE AS (
+  SELECT Name, Price FROM Products WHERE Price > 100
+)
+SELECT * FROM ProductCTE;
+
+-- Recursive CTE
+WITH Numbers AS (
+  SELECT 1 AS Num
+  UNION ALL
+  SELECT Num + 1 FROM Numbers WHERE Num < 10
+)
+SELECT * FROM Numbers;
+```
+
+### **Notes:**
+
+* CTEs improve readability and manage complexity.
+* Recursive CTEs must include termination conditions.
+
+---
+
+## **Module 8: Set Operations**
+
+### **Key Topics:**
+
+* `UNION`, `UNION ALL`, `INTERSECT`, `EXCEPT`
+
+### **Examples:**
+
+```sql
+-- UNION (removes duplicates)
+SELECT Name FROM Products
+UNION
+SELECT Name FROM ArchivedProducts;
+
+-- UNION ALL (keeps duplicates)
+SELECT Name FROM Products
+UNION ALL
+SELECT Name FROM ArchivedProducts;
+
+-- INTERSECT
+SELECT Name FROM Products
+INTERSECT
+SELECT Name FROM ArchivedProducts;
+
+-- EXCEPT
+SELECT Name FROM Products
+EXCEPT
+SELECT Name FROM ArchivedProducts;
+```
+
+### **Notes:**
+
+* All queries must have same number of columns and compatible types.
+* Use `UNION ALL` for better performance when duplicates are acceptable.
+
+---
+
+## **Module 9: Data Modification**
+
+### **Key Topics:**
+
+* `INSERT`, `UPDATE`, `DELETE`
+* Using subqueries in modification statements
+
+### **Examples:**
+
+```sql
+-- INSERT
+INSERT INTO Products (Name, Price) VALUES ('New Product', 99.99);
+
+-- UPDATE
+UPDATE Products SET Price = Price * 1.1 WHERE CategoryID = 3;
+
+-- DELETE
+DELETE FROM Products WHERE Discontinued = 1;
+```
+
+### **Notes:**
+
+* Always ensure `WHERE` clause in `UPDATE`/`DELETE` to avoid full-table changes.
+* `OUTPUT` clause can return affected rows.
+
+---
+
+## **Module 10: Transactions and Concurrency**
+
+### **Key Topics:**
+
+* ACID properties
+* Transactions: `BEGIN`, `COMMIT`, `ROLLBACK`
+* Isolation levels
+
+### **Examples:**
+
+```sql
+BEGIN TRANSACTION;
+UPDATE Accounts SET Balance = Balance - 100 WHERE AccountID = 1;
+UPDATE Accounts SET Balance = Balance + 100 WHERE AccountID = 2;
+COMMIT;
+```
+
+### **Notes:**
+
+* Use `ROLLBACK` to undo changes in case of error.
+* Isolation levels affect visibility and locking (e.g., `READ COMMITTED`, `SERIALIZABLE`).
+
+---
+
+## **Module 11: Error Handling and Programmability**
+
+### **Key Topics:**
+
+* `TRY...CATCH` blocks
+* `THROW` and `RAISERROR`
+* Stored procedures, functions, triggers
+
+### **Examples:**
+
+```sql
+BEGIN TRY
+  -- risky code
+  UPDATE Products SET Price = -10;
+END TRY
+BEGIN CATCH
+  PRINT ERROR_MESSAGE();
+  ROLLBACK;
+END CATCH;
+
+-- Stored procedure
+CREATE PROCEDURE GetExpensiveProducts
+AS
+BEGIN
+  SELECT * FROM Products WHERE Price > 1000;
+END;
+```
+
+### **Notes:**
+
+* Use `TRY...CATCH` for robust error handling.
+* Store logic in procedures/functions for reuse and abstraction.
+
+---
+
